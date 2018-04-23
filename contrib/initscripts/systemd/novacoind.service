@@ -1,0 +1,11 @@
+[Unit]
+Description=GULFCOINGOLD daemon serivce
+After=network.target
+
+[Service]
+Type=simple
+User=GULFCOINGOLD
+ExecStart=/opt/GULFCOINGOLD/GULFCOINGOLDd
+
+[Install]
+WantedBy=multi-user.target

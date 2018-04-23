@@ -1,0 +1,5 @@
+GULFCOINGOLD-qt usr/bin
+share/pixmaps/GULFCOINGOLD32.xpm usr/share/pixmaps
+share/pixmaps/GULFCOINGOLD80.xpm usr/share/pixmaps
+debian/GULFCOINGOLD-qt.desktop usr/share/applications
+debian/GULFCOINGOLD-qt.protocol usr/share/kde4/services/

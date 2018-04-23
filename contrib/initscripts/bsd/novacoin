@@ -1,0 +1,68 @@
+#!/bin/sh
+
+# PROVIDE: GULFCOINGOLD
+# REQUIRE: LOGIN
+# KEYWORD: shutdown
+
+#
+# Add the following lines to /etc/rc.conf.local or /etc/rc.conf
+# to enable this service:
+#
+# GULFCOINGOLD_enable (bool): Set to NO by default. Set this variable to YES if you want to enable GULFCOINGOLD service.
+# GULFCOINGOLD_config (path): Set to /usr/local/etc/GULFCOINGOLD.conf by default.
+# GULFCOINGOLD_user:  The user account GULFCOINGOLD daemon runs as. It uses 'root' user by default.
+# GULFCOINGOLD_group: The group account GULFCOINGOLD daemon runs as. It uses 'wheel' group by default.
+# GULFCOINGOLD_datadir (str): Default to "/var/db/GULFCOINGOLD". Base data directory.
+
+. /etc/rc.subr
+
+name=GULFCOINGOLD
+rcvar=GULFCOINGOLD_enable
+
+: ${GULFCOINGOLD_enable:=NO}
+: ${GULFCOINGOLD_config=/usr/local/etc/GULFCOINGOLD.conf}
+: ${GULFCOINGOLD_datadir=/var/db/GULFCOINGOLD}
+: ${GULFCOINGOLD_user="root"}
+: ${GULFCOINGOLD_group="wheel"}
+
+required_files=${GULFCOINGOLD_config}
+command=/usr/local/bin/GULFCOINGOLDd
+GULFCOINGOLD_chdir=${GULFCOINGOLD_datadir}
+pidfile="${GULFCOINGOLD_datadir}/GULFCOINGOLDd.pid"
+stop_cmd=GULFCOINGOLD_stop
+command_args="-conf=${GULFCOINGOLD_config} -datadir=${GULFCOINGOLD_datadir} -daemon -pid=${pidfile}"
+start_precmd="${name}_prestart"
+
+GULFCOINGOLD_create_datadir()
+{
+	echo "Creating data directory"
+	eval mkdir -p ${GULFCOINGOLD_datadir}
+	[ $? -eq 0 ] && chown -R ${GULFCOINGOLD_user}:${GULFCOINGOLD_group} ${GULFCOINGOLD_datadir}
+}
+
+GULFCOINGOLD_prestart()
+{
+	if [ ! -d "${GULFCOINGOLD_datadir}/." ]; then
+		GULFCOINGOLD_create_datadir || return 1
+	fi
+}
+
+GULFCOINGOLD_requirepidfile()
+{
+	if [ ! "0`check_pidfile ${pidfile} ${command}`" -gt 1 ]; then
+		echo "${name} not running? (check $pidfile)."
+		exit 1
+	fi
+}
+
+GULFCOINGOLD_stop()
+{
+    GULFCOINGOLD_requirepidfile
+
+	echo "Stopping ${name}."
+	eval ${command} -conf=${GULFCOINGOLD_config} -datadir=${GULFCOINGOLD_datadir} stop
+	wait_for_pids ${rc_pid}
+}
+
+load_rc_config $name
+run_rc_command "$1"

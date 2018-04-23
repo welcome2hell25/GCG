@@ -1,0 +1,13 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=GULFCOINGOLD
+Comment=GULFCOINGOLD P2P Cryptocurrency
+Comment[ru]=GULFCOINGOLD, P2P криптовалюта
+Comment[fr]=GULFCOINGOLD, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=GULFCOINGOLD, eşten eşe kriptografik sanal para birimi
+Exec=/usr/bin/GULFCOINGOLD-qt
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/GULFCOINGOLD80.xpm
+MimeType=x-scheme-handler/GULFCOINGOLD;
+Categories=Office;
